@@ -1,0 +1,27 @@
+type User{
+    id: ID!
+    username: String!
+    email: String!
+
+    contacts: [Contact!]!
+}
+
+type Contact{
+    id: ID!
+    name: String!
+    description: String!
+    user: User!
+}
+
+input NewContactFriend {
+    name:       String!
+    description:String!
+}
+
+type Query{
+    contacts: [Contact!]!
+}
+
+type Mutation{
+    createContactFriend(input: NewContactFriend!): Contact
+}
