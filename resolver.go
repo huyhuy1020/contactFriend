@@ -2,6 +2,8 @@ package contactFriend
 
 import (
 	"context"
+	"errors"
+
 	"github.com/huyhuy1020/contactFriend/models"
 )
 
@@ -76,8 +78,24 @@ func (m *mutationResolver) CreateContactFriend(ctx context.Context, input NewCon
 	panic("implement me")
 }
 
-func (r *contactResolver) User(ctx context.Context) ([]*models.Contact, error) {
-	panic("implement me")
+//we use a loop to add a user inside we use the pointer to get list of data
+func (r *contactResolver) User(ctx context.Context, obj *models.Contact) ([]*models.User, error) {
+	var users = []*models.User{}
+
+	user := new(models.User)
+	//list of data
+	for _, u := range users {
+		if u.ID == obj.UserID {
+			users = append(users, u)
+			break
+		}
+	}
+
+	if user == nil {
+		return nil, errors.New("user with id is not exsit")
+	}
+
+	return users, nil
 }
 
 type userResolver struct{ *Resolver }
@@ -90,6 +108,18 @@ func (r *Resolver) User1() *userResolver {
 	return &userResolver{r}
 }
 
+func (u *userResolver) Contacts(ctx context.Context, obj *models.User) ([]*models.Contact, error) {
+	//add pointer to a slice of point our contact
+	var contact []*models.Contact
+
+	for _, c := range contact {
+		//if user_contact is equal to user_id we save it
+		if c.UserID == obj.ID {
+			contact = append(contact, c)
+		}
+	}
+	return contact, nil
+}
 func (m *mutationResolver) CreateContactsFriend(ctx context.Context) ([]*models.Contact, error) {
 	panic("implement me")
 }
